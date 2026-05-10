@@ -98,33 +98,34 @@ terraform init
 terraform plan
 
 # Применение конфигурации
-terraform apply -auto-approve
+terraform apply -auto-approve (01.png)
+
 Проверка работоспособности
 1. Просмотр выходных данных
 terraform output
 Пример вывода:
 nat_instance_ip = "111.88.246.171"
-private_vm_ip = "192.168.20.29"
+private_vm_ip = "192.168.20.29"  (02.png)
 public_vm_ip = "89.169.151.163"
 ssh_to_private_vm_through_public_command = "ssh -J ubuntu@89.169.151.163 ubuntu@192.168.20.29"
 2. Подключение к ВМ
-# Подключение к публичной ВМ
+# Подключение к публичной ВМ (03.png)
 ssh ubuntu@$(terraform output -raw public_vm_ip)
 
 # Подключение к приватной ВМ через публичную
-ssh -J ubuntu@$(terraform output -raw public_vm_ip) ubuntu@$(terraform output -raw private_vm_ip)
+ssh -J ubuntu@$(terraform output -raw public_vm_ip) ubuntu@$(terraform output -raw private_vm_ip) 
 3. Проверка интернета с приватной ВМ
 # Проверка доступности интернета
-ping 8.8.8.8
+ping 8.8.8.8 (05.png)
 
 # Проверка внешнего IP (должен показать IP NAT-инстанса)
-curl ifconfig.me
+curl ifconfig.me (08.png? 09.png)
 Настройка NAT-инстанса (если не настроен автоматически)
 # Подключение к NAT-инстансу
 ssh ubuntu@$(terraform output -raw nat_instance_ip)
 
 # Включение IP forwarding
-sudo sysctl -w net.ipv4.ip_forward=1
+sudo sysctl -w net.ipv4.ip_forward=1 (08.png)
 echo "net.ipv4.ip_forward=1" | sudo tee -a /etc/sysctl.conf
 
 # Настройка NAT
@@ -145,15 +146,14 @@ terraform destroy -auto-approve
 # Проверьте наличие ключа
 ls -la ~/.ssh/id_ed25519_news.pub
 
-# Создайте ключ если отсутствует
+# Создание ключа 
 ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_news -N ""
-Ошибка: "CIDR has allocated addresses"
-Нельзя изменить CIDR существующей подсети с активными ресурсами. Используйте terraform destroy и затем terraform apply.
-Нет доступа к интернету с приватной ВМ
-Проверrа настроек NAT:
+
+Проверка настроек NAT:
 # На NAT-инстансе
 sudo sysctl net.ipv4.ip_forward
 sudo iptables -t nat -L -n -v
+
 Результаты
 ✅ VPC создана
 ✅ Публичная подсеть 192.168.10.0/24
@@ -168,25 +168,25 @@ sudo iptables -t nat -L -n -v
 Настройка NAT-инстанса:
 
 1. Проблема: Изначально приватная ВМ (192.168.20.29) недоступна 
-   из публичной сети (100% packet loss) (09.png)
+   из публичной сети (100% packet loss) 
 
 2. Решение: На NAT-инстансе выполнены следующие настройки:
    - Включена IP-маршрутизация (net.ipv4.ip_forward=1)
    - Настроен masquerading через iptables
-   - Правила сохранены для перезагрузки (010.png)
+   - Правила сохранены для перезагрузки (06.png,08.png)
 
 3. Результат:
    - Приватная ВМ стала доступна (0% packet loss)
    - Появился доступ в интернет (ping 8.8.8.8 успешен)
    - Трафик выходит через IP NAT-инстанса (curl ifconfig.me 
-     показывает 89.169.151.163 - внешний IP NAT-инстанса) (011.png)
+     показывает 89.169.151.163 - внешний IP NAT-инстанса) (08.png)
 
-Скриншот 010.png: "Прямой доступ в интернет с NAT-инстанса"
+Скриншот 09.png: "Прямой доступ в интернет с NAT-инстанса"
    ubuntu@fhm6b9urgnk4880dr5ng:~$ curl ifconfig.me
     89.169.151.163
 Подпись: NAT-инстанс имеет собственный публичный IP 89.169.151.163
 
-Скриншот 011.png: "Доступ в интернет через NAT с приватной ВМ"
+Скриншот 09.png: "Доступ в интернет через NAT с приватной ВМ"
   ubuntu@fhmp09p5s431qbdaule2:~$ curl ifconfig.me 
   111.88.246.171
 Подпись: Приватная ВМ выходит в интернет через NAT, поэтому показывает внешний IP NAT-инстанса (111.88.246.171)
