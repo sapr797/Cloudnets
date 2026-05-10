@@ -2,14 +2,14 @@
 
 ## Реально развернуть в AWS (нужен аккаунт)
 
-Создать аналогичную инфраструктуру в AWS:
+Создать аналогичную инфраструктуру в AWS(localstack):
 - VPC 10.10.0.0/16
 - Публичная подсеть 10.10.1.0/24 с IGW
 - NAT Gateway в публичной подсети
 - Приватная подсеть 10.10.2.0/24
 - Бастион-хост (публичная ВМ)
 - Приватная ВМ без публичного IP
-- Доступ в интернет из приватной сети через NAT
+- Доступ в интернет из приватной сети через NAT (01.png)
 
 ## Шаг 1: Настройка AWS CLI и создание ключа
 
@@ -46,13 +46,14 @@ terraform plan
 terraform apply -auto-approve
 
 **Шаг 4: Проверка доступа**
-Получите IP публичной ВМ
-terraform output public_vm_public_ip
+Получение IP публичной ВМ
+terraform output public_vm_public_ip (05.png)
+
 Подключение к публичной ВМ
-ssh -i ~/.ssh/aws_key ubuntu@$(terraform output -raw public_vm_public_ip)
+ssh -i ~/.ssh/aws_key ubuntu@$(terraform output -raw public_vm_public_ip) (05.png)
 
 На публичной ВМ проверяем доступ к приватной ВМ
-ping $(terraform output -raw private_vm_private_ip)
+ping $(terraform output -raw private_vm_private_ip) (05.png)
 
 Подключение к приватной ВМ через публичную (бастион)
 ssh -J ubuntu@$(terraform output -raw public_vm_public_ip) -i ~/.ssh/aws_key ubuntu@$(terraform output -raw private_vm_private_ip)
@@ -153,7 +154,7 @@ ssh -J ubuntu@54.214.172.227 -i /home/ubuntu/.ssh/aws_key ubuntu@10.10.2.4
 # Подключение к приватной ВМ через SSM (без бастиона)
 aws ssm start-session --target i-cf34dc5f07f8fdf42
 
-#Выводы Terraform:
+#Выводы Terraform: (04.png, 05.png)
 private_vm_private_ip = "10.10.2.4"
 private_vm_id = "i-cf34dc5f07f8fdf42"
 public_vm_public_ip = "54.214.172.227"
