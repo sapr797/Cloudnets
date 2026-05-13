@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: phpmyadmin
+spec:
+  containers:
+  - name: phpmyadmin
+    image: alpine:3.18
+    command:
+    - /bin/sh
+    - -c
+    - |
+      apk add --no-cache wget phpmyadmin php-mysqli php-session apache2
+      cp -r /usr/share/webapps/phpmyadmin/* /var/www/localhost/htdocs/
+      /usr/sbin/httpd -f /etc/apache2/httpd.conf -D FOREGROUND
+    env:
+    - name: PMA_HOST
+      value: "rc1a-jc560f9ti5mvsdde.mdb.yandexcloud.net"
+    - name: PMA_PORT
+      value: "3306"
+    - name: PMA_USER
+      value: "netology_user"
+    - name: PMA_PASSWORD
+      value: "QtTStrong8"
+    ports:
+    - containerPort: 80
