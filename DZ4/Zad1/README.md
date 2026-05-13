@@ -4,7 +4,7 @@
 
 ### Задание 1. Yandex Cloud - MySQL кластер
 
-#### ✅ 1.1 Кластер баз данных MySQL через Terraform
+#### ✅ 1.1 Кластер баз данных MySQL через Terraform (0.10.png, 011.png)
 **Реализация:** Файл `mysql.tf`
 ```
 resource "yandex_mdb_mysql_cluster" "main" {
@@ -14,25 +14,25 @@ resource "yandex_mdb_mysql_cluster" "main" {
   version             = "8.0"
   deletion_protection = true
 }
-✅ 1.2 Private подсети в разных зонах
+✅ 1.2 Private подсети в разных зонах ( 011.png)
 Реализация: Файл network.tf
 
- 1.3 Ноды MySQL в разных подсетях
+ 1.3 Ноды MySQL в разных подсетях ( 013.png,  014.png)
 Реализация: Файл mysql.tf - три хоста в разных зонах
 
 ✅ 1.4 Репликация с произвольным временем обслуживания
 Реализация: Файл mysql.tf
 
-✅ 1.5 Окружение Prestable, платформа Intel Broadwell 50% CPU, диск 20 ГБ
+✅ 1.5 Окружение Prestable, платформа Intel Broadwell 50% CPU, диск 20 ГБ  (02.png)
 Реализация: Файл mysql.tf
 
-✅ 1.6 Время начала резервного копирования 23:59
+✅ 1.6 Время начала резервного копирования 23:59  (09.png)
 Реализация: Файл mysql.tf
 
 ✅ 1.7 Защита от непреднамеренного удаления
 Реализация: Файл mysql.tf
 
-✅ 1.8 Создание БД netology_db с логином и паролем
+✅ 1.8 Создание БД netology_db с логином и паролем  (08.png)
 Реализация: Файл mysql.tf
 
 Задание 2. Yandex Cloud - Kubernetes кластер
@@ -40,7 +40,7 @@ resource "yandex_mdb_mysql_cluster" "main" {
 Реализация: Файл network.tf
 
 ✅2.2 Отдельный сервис-аккаунт с правами
-Реализация: Файл iam.tf
+Реализация: Файл iam.tf 
 
 # Роль editor для мастера
 resource "yandex_resourcemanager_folder_iam_member" "k8s_master_roles" {
@@ -70,11 +70,11 @@ kms_provider {
   key_id = yandex_kms_symmetric_key.k8s-key.id
 }
 ⚠️ 1.13 Группа узлов из трёх машин с автомасштабированием до шести
-Статус: Частично выполнено (созданы 2 ноды без автомасштабирования)
+Статус: Частично выполнено (созданы 2 ноды без автомасштабирования) (02.png)
 
 Реализация (минимальная): Файл k8s.tf
 
- 1.14 Подключение к кластеру через kubectl
+ 1.14 Подключение к кластеру через kubectl (01.png)
 Реализация:
 
 yc managed-kubernetes cluster get-credentials netology-k8s-cluster --external
@@ -134,7 +134,7 @@ kubectl run mysql-client --image=mysql:8.0 --rm -it --restart=Never -- \
 
 ## Выполненные пункты задания
 
-### ✅ MySQL кластер
+### ✅ MySQL кластер  (014.png)
 - Private подсети в зонах a, b, d
 - 3 хоста (master + 2 реплики) в разных подсетях
 - Репликация с произвольным временем обслуживания (ANYTIME)
@@ -144,7 +144,7 @@ kubectl run mysql-client --image=mysql:8.0 --rm -it --restart=Never -- \
 - Защита от удаления (deletion_protection = true)
 - База данных netology_db, пользователь netology_user
 
-### ✅ Kubernetes кластер
+### ✅ Kubernetes кластер  (06.png, 07.png)
 - Public подсети в зонах a, b, d
 - Отдельный сервис-аккаунт с правами (editor, container-registry.images.puller)
 - Шифрование через KMS
