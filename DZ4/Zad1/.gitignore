@@ -1,3 +1,14 @@
-Zad11/
+# Terraform
 .terraform/
 .terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+terraform.tfvars
+
+# Large files
+*.zip
+*.gz
+
+# OS files
+.DS_Store
+Thumbs.db
