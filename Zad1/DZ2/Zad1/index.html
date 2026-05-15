@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой статический сайт в Yandex Cloud</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 600px;
+        }
+        h1 { color: #333; margin-bottom: 20px; }
+        p { color: #666; line-height: 1.6; }
+        .secured { color: #10b981; font-weight: bold; }
+        .lock { font-size: 50px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="lock">🔒</div>
+        <h1>Сайт защищен HTTPS!</h1>
+        <p>Этот статический сайт размещен в<br>
+        <strong>Yandex Cloud Object Storage</strong></p>
+        <p class="secured">✅ Соединение защищено SSL-сертификатом</p>
+        <p>Страница зашифрована с помощью<br>
+        KMS ключа в бакете</p>
+        <hr>
+        <small>Yandex Cloud - KMS + Object Storage</small>
+    </div>
+</body>
+</html>
